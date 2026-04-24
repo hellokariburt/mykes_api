@@ -35,7 +35,7 @@ const getMics = async (params: MicQueryParams) => {
   return { mics, count };
 };
 
-const getMic = async (id: number) => {
+const getMic = async (id: bigint) => {
   return await prisma.mics.findUnique({
     where: { id },
     include: {
