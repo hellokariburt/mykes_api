@@ -34,9 +34,9 @@ Same parameters as `/mics`, plus:
 
 `GET /api/v1/mic?id={id}`
 
-| Parameter | Type   | Description       |
-|----------|--------|-------------------|
-| `id`     | number | Mic ID (required) |
+| Parameter | Type   | Description                    |
+|----------|--------|--------------------------------|
+| `id`     | string | Mic ID as an integer (required) |
 
 ## API Documentation
 
