@@ -14,7 +14,11 @@ const app = express();
 const PORT = process.env.PORT || 9999;
 
 BigInt.prototype["toJSON"] = function () {
-  return parseInt(this.toString());
+  const value = this.toString();
+  if (BigInt(value) > BigInt(Number.MAX_SAFE_INTEGER)) {
+    return value;
+  }
+  return Number(value);
 };
 
 app.use(express.json());

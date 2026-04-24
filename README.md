@@ -1,57 +1,52 @@
-# OPEN MYC API
+# OpenMYC API
 
-**Welcome to Open MYC API: Locate the Laughs**
+**Locate the Laughs** -- All the comedy open mic info in the New York City five boroughs, accessible through a RESTful API.
 
-All the comedy open mic info in the New York City five boroughs in one place, easily accessible through a modern RESTful API.
+Built with Express, TypeScript, Prisma, and PostgreSQL.
 
-**This API is hosted on [Heroku](https://open-myc-api-b3fdf5fc5994.herokuapp.com/).**
+## Endpoints
 
-All data is stored in a Heroku Postgres Database. The API was built using Spring Boot.
-
-## Get Requests
+All endpoints are under `/api/v1/`.
 
 ### Get all mics
 
-`GET /mics`
+`GET /api/v1/mics`
 
-### Get mics by id
+| Parameter    | Type   | Description                                      |
+|-------------|--------|--------------------------------------------------|
+| `borough`   | string | Comma-separated list or `all`. Values: `manhattan`, `queens`, `bronx`, `brooklyn`, `staten-island` |
+| `day`       | string | Comma-separated list or `all`. Values: `sunday` through `saturday` |
+| `free`      | string | Set to `true` to filter for free mics only       |
+| `limit`     | number | Results per page (default: 10)                   |
+| `offset`    | number | Number of results to skip (default: 0)           |
 
-`Get /mic/{id}`
+### Get mics by start time
 
-### Get mics by borough
+`GET /api/v1/micTimes`
 
-`GET /mics/get-borough?borough={borough}`
+Same parameters as `/mics`, plus:
 
-**borough**: Manhattan, Queens, Bronx, Brooklyn, Staten-Island\
+| Parameter    | Type   | Description                                      |
+|-------------|--------|--------------------------------------------------|
+| `start-time`| string | Filter mics starting at or after this time (e.g. `19:00:00`) |
 
-### Get free mics by borough
+### Get a single mic
 
-`GET /mics/get-borough-day?page={page}&borough={borough}`
+`GET /api/v1/mic?id={id}`
 
-**page** : #
-**borough**: Manhattan, Queens, Bronx, Brooklyn, Staten-Island\
+| Parameter | Type   | Description       |
+|----------|--------|-------------------|
+| `id`     | number | Mic ID (required) |
 
-### Get mics by day and borough
+## API Documentation
 
-`GET /mics/get-borough-day?page={page}&day={day}&borough={borough}`
+Swagger UI is available at `/api-docs` when the server is running.
 
-**page** : #
-**day**: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday\
-**borough**: Manhattan, Queens, Bronx, Brooklyn, Staten-Island\
+## Development
 
-### Get free mics by day and borough
+```bash
+npm install
+npm run dev
+```
 
-`GET /mics/get-borough-day-free?page={page}&day={day}&borough={borough}`
-
-**page** : #
-**day**: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday\
-**borough**: Manhattan, Queens, Bronx, Brooklyn, Staten-Island\
-
-**_@Parameters are optional_**
-
-**_All requests have Pagination and Sorting, append parameters:_**\
-page={}\
-pageSize={}\
-sortBy={}
-
-**[Swagger API Documentation](https://open-myc-api-b3fdf5fc5994.herokuapp.com/swagger-ui/index.html#/)**
+Requires `DATABASE_URL` in your environment (Prisma/PostgreSQL).

@@ -45,6 +45,10 @@ const micsController = router.get("/mics", async (req, res, next) => {
 const micController = router.get("/mic", async (req, res, next) => {
   try {
     const id = Number(req.query.id);
+    if (!req.query.id || !Number.isInteger(id) || id <= 0) {
+      res.status(400).json({ error: "Valid numeric id is required" });
+      return;
+    }
     const mic = await getMic(id);
     res.status(200).json({ mic });
   } catch (error) {
