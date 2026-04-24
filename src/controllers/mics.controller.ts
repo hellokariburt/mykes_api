@@ -1,10 +1,5 @@
 import express from "express";
-import {
-  getMics,
-  getMic,
-  getMicTimes,
-  getMicHost,
-} from "../services/mics.service";
+import { getMics, getMic, getMicTimes } from "../services/mics.service";
 
 const router = express.Router();
 
@@ -76,16 +71,6 @@ const micController = router.get("/mic", async (req, res, next) => {
   }
 });
 
-const micHostController = router.get("/micHost", async (req, res, next) => {
-  try {
-    const id = req.query.id;
-    const mic = await getMicHost(id);
-    res.status(200).json({ mic });
-  } catch (error) {
-    next(error);
-  }
-});
-
 const micTimesController = router.get("/micTimes", async (req, res, next) => {
   try {
     const params = parseParams(req);
@@ -103,4 +88,4 @@ const micTimesController = router.get("/micTimes", async (req, res, next) => {
   }
 });
 
-export { micController, micsController, micTimesController, micHostController };
+export { micController, micsController, micTimesController };

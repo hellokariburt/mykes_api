@@ -57,10 +57,6 @@ const getMic = async (id?: number) => {
   });
 };
 
-const getMicHost = async (id?: number) => {
-  return await getMic(id); // Assuming same functionality as getMic
-};
-
 const getMicTimes = async (params: any) => {
   const mic_cost = params.cost === "true" ? 1 : undefined;
 
@@ -110,4 +106,4 @@ const getMicTimes = async (params: any) => {
   return { mics, count };
 };
 
-export { getMics, getMic, getMicTimes, getMicHost };
+export { getMics, getMic, getMicTimes };
