@@ -1,36 +1,20 @@
-import express from "express";
-import { getMics, getMic, getMicTimes } from "../services/mics.service";
+import express, { Request } from "express";
+import { getMics, getMic } from "../services/mics.service";
+import { MicQueryParams, ALL_BOROUGHS, ALL_DAYS } from "../types";
 
 const router = express.Router();
 
-// Parameter handling function
-const parseParams = (req) => {
-  let borough = req.query.borough;
+const parseParams = (req: Request): MicQueryParams => {
+  const borough = req.query.borough as string | undefined;
   let boroughArray = borough ? borough.split(",") : [];
-
   if (borough === "all") {
-    boroughArray = [
-      "manhattan",
-      "queens",
-      "staten-island",
-      "bronx",
-      "brooklyn",
-    ];
+    boroughArray = [...ALL_BOROUGHS];
   }
 
-  let day = req.query.day;
+  const day = req.query.day as string | undefined;
   let dayArray = day ? day.split(",") : [];
-
   if (day === "all") {
-    dayArray = [
-      "sunday",
-      "monday",
-      "tuesday",
-      "wednesday",
-      "thursday",
-      "friday",
-      "saturday",
-    ];
+    dayArray = [...ALL_DAYS];
   }
 
   return {
@@ -38,24 +22,21 @@ const parseParams = (req) => {
     borough: boroughArray,
     limit: Number(req.query.limit) || 10,
     offset: Number(req.query.offset) || 0,
-    start_time: req.query["start-time"] || "00:00:00",
-    cost: req.query.free || "false",
+    start_time: (req.query["start-time"] as string) || "00:00:00",
+    cost: (req.query.free as string) || "false",
   };
 };
 
-// Route handlers
 const micsController = router.get("/mics", async (req, res, next) => {
   try {
     const params = parseParams(req);
     const { mics, count } = await getMics(params);
-    res
-      .status(200)
-      .json({
-        totalMics: count,
-        offset: params.offset,
-        limit: params.limit,
-        mics,
-      });
+    res.status(200).json({
+      totalMics: count,
+      offset: params.offset,
+      limit: params.limit,
+      mics,
+    });
   } catch (error) {
     next(error);
   }
@@ -63,7 +44,7 @@ const micsController = router.get("/mics", async (req, res, next) => {
 
 const micController = router.get("/mic", async (req, res, next) => {
   try {
-    const id = req.query.id;
+    const id = Number(req.query.id);
     const mic = await getMic(id);
     res.status(200).json({ mic });
   } catch (error) {
@@ -74,15 +55,13 @@ const micController = router.get("/mic", async (req, res, next) => {
 const micTimesController = router.get("/micTimes", async (req, res, next) => {
   try {
     const params = parseParams(req);
-    const { mics, count } = await getMicTimes(params);
-    res
-      .status(200)
-      .json({
-        totalMics: count,
-        offset: params.offset,
-        limit: params.limit,
-        mics,
-      });
+    const { mics, count } = await getMics(params);
+    res.status(200).json({
+      totalMics: count,
+      offset: params.offset,
+      limit: params.limit,
+      mics,
+    });
   } catch (error) {
     next(error);
   }
